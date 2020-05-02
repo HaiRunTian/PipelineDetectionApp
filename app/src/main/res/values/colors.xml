@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="gray_simple">#f7f4f8</color>
+    <color name="home_text">#AAAAAA</color>
+    <color name="lucency">#389ef6</color>
+    <color name="gray">#C5C5C5</color>
+    <color name="tab_lucency">#95cafe</color>
+    <color name="grey04">#4F4F4F</color>
+</resources>

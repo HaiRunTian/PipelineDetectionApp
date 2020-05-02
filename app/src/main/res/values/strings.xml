@@ -1,0 +1,23 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">排水检测</string>
+
+    <string name="areaName">区域</string>
+    <string name="roadName">道路名称</string>
+    <string name="imageName">影像编号</string>
+    <string name="lineDot">管线点号</string>
+    <string name="connectionPoint">连接点号</string>
+    <string name="startingPointOrigin">起点埋深</string>
+    <string name="startingPointEnd">终点埋深</string>
+    <string name="folwDirection">流向</string>
+    <string name="pipe">管材</string>
+    <string name="pipeDiameter">管径</string>
+    <string name="type">管类</string>
+    <string name="inspectDate">日期</string>
+    <string name="remark">备注</string>
+    <string name="projectName">工程名称</string>
+    <string name="projectNumber">项目编号</string>
+    <string name="inspectorName">检测员</string>
+    <string name="registrarName">记录员</string>
+    <string name="inspector">检测方法</string>
+
+</resources>

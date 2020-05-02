@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/lucency"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/return_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/left"
+            android:text="返回"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="新建工程"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/requisition_title_small" />
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout style="@style/LinearCenterVertical"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/projectName"
+                        />
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/projectName"
+                    style="@style/FunctionEdtStyle"
+
+                    />
+            </LinearLayout>
+
+            <include layout="@layout/view_item" />
+
+            <LinearLayout style="@style/LinearCenterVertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/projectNumber" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/projectNumber"
+                    style="@style/FunctionEdtStyle" />
+            </LinearLayout>
+
+            <include layout="@layout/view_item" />
+            <LinearLayout style="@style/LinearCenterVertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="检测模式" />
+                </LinearLayout>
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    />
+                <Spinner
+                    android:id="@+id/spCheckMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:entries="@array/checkMode"
+                    />
+            </LinearLayout>
+            <include layout="@layout/view_item" />
+
+            <LinearLayout style="@style/LinearCenterVertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/inspector" />
+                </LinearLayout>
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    />
+                <Spinner
+                    android:id="@+id/inspector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:entries="@array/detection"
+                    />
+            </LinearLayout>
+
+            <include layout="@layout/view_item" />
+
+            <LinearLayout style="@style/LinearCenterVertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/areaName" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/areaName"
+                    style="@style/FunctionEdtStyle" />
+            </LinearLayout>
+
+            <include layout="@layout/view_item" />
+
+            <LinearLayout style="@style/LinearCenterVertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/inspectorName" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/inspectorName"
+                    style="@style/FunctionEdtStyle" />
+            </LinearLayout>
+
+            <include layout="@layout/view_item" />
+
+            <LinearLayout style="@style/LinearCenterVertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/registrarName" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/registrarName"
+                    style="@style/FunctionEdtStyle" />
+            </LinearLayout>
+
+            <include layout="@layout/view_item" />
+            <LinearLayout style="@style/LinearCenterVertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="时间："
+                        android:focusable="false"
+                        />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/dataTime"
+                    style="@style/FunctionEdtStyle" />
+            </LinearLayout>
+
+            <include layout="@layout/view_item" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tvSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/symbolic_item"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="@color/colorWhite"
+        android:textSize="18dp"
+        android:visibility="visible" />
+</LinearLayout>

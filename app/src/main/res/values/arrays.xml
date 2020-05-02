@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 流向-->
+    <string-array name="pipe">
+        <item>顺流</item>
+        <item>逆流</item>
+    </string-array>
+
+    <!--管材-->
+    <string-array name="folwDirection">
+        <item></item>
+        <item>玻璃钢管</item>
+        <item>钢管</item>
+        <item>钢筋混凝土管</item>
+        <item>双壁波纹管</item>
+        <item>混凝土管</item>
+        <item>塑料管</item>
+        <item>石棉水泥管</item>
+        <item>陶瓷管</item>
+        <item>陶土管</item>
+        <item>砖石沟</item>
+        <item>铸铁管</item>
+        <item>玻璃钢夹沙</item>
+    </string-array>
+    <!-- 管类-->
+    <string-array name="type">
+        <item>雨水管道</item>
+        <item>污水管道</item>
+        <item>雨污合流</item>
+    </string-array>
+
+    <!-- 检测方法-->
+    <string-array name="detection">
+        <item>CCTV</item>
+        <item>QV</item>
+        <item>声纳</item>
+        <item>暗渠摸查</item>
+    </string-array>
+
+    <!-- 检测方法-->
+    <string-array name="checkMode">
+        <item>模式一</item>
+        <item>模式二</item>
+    </string-array>
+
+    <!--    缺陷代码-->
+    <string-array name="defect">
+        <item></item>
+        <item>PL-破裂</item>
+        <item>BX-变形</item>
+        <item>FS-腐蚀</item>
+        <item>CK-错口</item>
+        <item>QF-起伏</item>
+        <item>TJ-脱节</item>
+        <item>TL-接口材料脱落</item>
+        <item>AJ-支管暗接</item>
+        <item>CR-异物穿入</item>
+        <item>SL-渗漏</item>
+        <item>CJ-沉积</item>
+        <item>JG-结垢</item>
+        <item>ZW-障碍物</item>
+        <item>CQ-残墙坝根</item>
+        <item>SG-树根</item>
+        <item>FZ-浮渣</item>
+    </string-array>
+
+    <!--    检查井问题-->
+    <string-array name="well">
+        <item></item>
+        <item>JA破损</item>
+        <item>JB塌陷</item>
+        <item>JC渗漏</item>
+        <item>JD抹面剥落</item>
+        <item>JE无防坠网</item>
+        <item>JF树根</item>
+        <item>JG盖框间高差和间隙超限</item>
+        <item>JH错盖</item>
+    </string-array>
+
+    <!--    雨水口问题-->
+    <string-array name="water">
+        <item></item>
+        <item>KA破损</item>
+        <item>KB塌陷</item>
+        <item>KC渗漏</item>
+        <item>KD抹面剥落</item>
+        <item>KE树根</item>
+        <item>KF盖框间高差和间隙超限</item>
+        <item>KG孔眼堵塞</item>
+        <item>KH异臭</item>
+    </string-array>
+
+    <!--    其他问题-->
+    <string-array name="about">
+        <item></item>
+        <item>QA排水管渠管顶覆土是否疏松</item>
+        <item>QB井盖是否被占压</item>
+        <item>QC原废旧管及雨水篦检查井是否拆除或填埋</item>
+    </string-array>
+
+    <string-array name="grade">
+        <item></item>
+        <item>Ⅰ</item>
+        <item>Ⅱ</item>
+        <item>Ⅲ</item>
+        <item>Ⅳ</item>
+    </string-array>
+
+
+
+</resources>

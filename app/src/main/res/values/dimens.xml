@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="big">25sp</dimen>
+    <dimen name="requisition_title_small">20sp</dimen>
+    <dimen name="personage_name_small">20sp</dimen>
+    <dimen name="personage_text_small">18sp</dimen>
+    <dimen name="personage_text">16sp</dimen>
+    <dimen name="personage_text_tiny">15sp</dimen>
+    <dimen name="tiny">12sp</dimen>
+    <dimen name="min">10sp</dimen>
+</resources>
