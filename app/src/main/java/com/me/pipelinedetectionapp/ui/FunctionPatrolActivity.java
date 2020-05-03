@@ -49,8 +49,13 @@ public class FunctionPatrolActivity extends AppCompatActivity {
     @BindView(R.id.function_tv)
     TextView functionTv;
     private Unbinder unbinder;
-    private String[] title = {"工程名称", "项目编号", "区域", "检测方法", "检测员", "记录员",
+    private String[] title = {"序号", "工程名称", "项目编号", "区域", "检测方法", "检测员", "记录员","影像编号",
             "道路名称", "管线点号", "连接点号", "起点埋深", "终点埋深", "流向", "管材", "管径", "管类", "日期", "备注"};
+
+    private String[] title2 = {"序号", "工程名称", "项目编号", "区域", "检测方法", "检测员", "记录员","影像编号",
+            "道路名称", "起始设施编号", "终止设施编号", "检测长度", "流向", "充满度(%)", "管材", "管渠规格(mm)", "管类",
+            "缺陷距离", "缺陷代码", "缺陷等级", "雨污混接情况", "检查井、雨水口及其他问题", "照片编号", "位置", "备注"};
+
     private String fileName;
     private List<DetectionDb> detectionDbList;
     private List<PipePSCheckDb> pipePSCheckDbList;
@@ -61,6 +66,7 @@ public class FunctionPatrolActivity extends AppCompatActivity {
     private PipePSCheckDbDao pipePSCheckDbDao;
     private String projectName;
     private String projectMode;
+    private int counts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +75,7 @@ public class FunctionPatrolActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         projectName = getIntent().getStringExtra("projectName");
         projectMode = getIntent().getStringExtra("checkMode");
-        functionTv.setText(projectName + "工程");
+        functionTv.setText(projectName);
         initView();
         initData();
     }
@@ -83,6 +89,7 @@ public class FunctionPatrolActivity extends AppCompatActivity {
         if (projectMode.equals(Folders.PRJ_MODE1)) {
             list2 = pipePSCheckDbDao.queryBuilder().orderDesc(PipePSCheckDbDao.Properties.Id).list();
             if (list2.size() != 0) {
+                counts = list2.size();
                 pipePSCheckDbList = pipePSCheckDbDao.queryBuilder().where(PipePSCheckDbDao.Properties.ProjectName.eq(projectName)).orderDesc(PipePSCheckDbDao.Properties.Id).build().list();
             }
 
@@ -91,9 +98,9 @@ public class FunctionPatrolActivity extends AppCompatActivity {
             functionAdapter2.notifyDataSetChanged();
 
         } else if (projectMode.equals(Folders.PRJ_MODE2)) {
-
             list = detectionDbDao.queryBuilder().orderDesc(DetectionDbDao.Properties.Id).list();
             if (list.size() != 0) {
+                counts = list.size();
                 detectionDbList = detectionDbDao.queryBuilder().where(DetectionDbDao.Properties.ProjectName.eq(projectName)).orderDesc(DetectionDbDao.Properties.Id).build().list();
             }
             functionAdapter = new FunctionAdapter(this, detectionDbList);
@@ -101,7 +108,7 @@ public class FunctionPatrolActivity extends AppCompatActivity {
             functionAdapter.notifyDataSetChanged();
         }
 
-
+        functionTv.setText(projectName + "(" + counts + ")");
     }
 
     private void initView() {
@@ -144,9 +151,23 @@ public class FunctionPatrolActivity extends AppCompatActivity {
                 String areaName = getIntent().getStringExtra("areaName");
                 String testMethod = getIntent().getStringExtra("testMethod");
                 String time = DateTimeUtil.getCurrentDateFromFormat(DateTimeUtil.DATE_FORMAT_YYYYMMDD_HHMMSS);
-                setExcel(title, projectName);
-                List<DetectionDb> list = detectionDbDao.queryBuilder().where(DetectionDbDao.Properties.ProjectName.eq(projectName)).build().list();
-                ExcelUtil.QvListToExcel(list, fileName, projectName, projectNumber, inspectorName, registrarName, areaName, testMethod, time, this);
+
+                File file = new File(Folders.APP_PATH +"/" +projectName + "/" + Folders.EXCEL_DATA);
+                ExcelUtil.makeDir(file);
+                //excel表名
+                fileName = file.toString() +"/"+ projectName + "-" + time + ".xls";
+                if (projectMode.equals(Folders.PRJ_MODE1)) {
+                    ExcelUtil.initExcel(fileName, title2, projectName + "表");
+                    List<PipePSCheckDb> list = pipePSCheckDbDao.queryBuilder().where(PipePSCheckDbDao.Properties.ProjectName.eq(projectName)).build().list();
+                    ExcelUtil.QvListToExcel2(list, fileName, projectName, projectNumber, inspectorName, registrarName, areaName, testMethod, this);
+                } else {
+                    //初始化表格
+                    ExcelUtil.initExcel(fileName, title, projectName + "表");
+                    List<DetectionDb> list = detectionDbDao.queryBuilder().where(DetectionDbDao.Properties.ProjectName.eq(projectName)).build().list();
+                    ExcelUtil.QvListToExcel(list, fileName, projectName, projectNumber, inspectorName, registrarName, areaName, testMethod, this);
+                }
+
+
                 break;
             default:
                 break;
@@ -164,17 +185,19 @@ public class FunctionPatrolActivity extends AppCompatActivity {
         if (projectMode.equals(Folders.PRJ_MODE1)) {
             pipePSCheckDbList = pipePSCheckDbDao.queryBuilder().where(PipePSCheckDbDao.Properties.ProjectName.eq(projectName)).orderDesc(PipePSCheckDbDao.Properties.Id).build().list();
             if (pipePSCheckDbList.size() != 0) {
+                counts = pipePSCheckDbList.size();
                 functionAdapter2.setContentList(pipePSCheckDbList);
                 functionAdapter2.notifyDataSetChanged();
             }
         } else {
             detectionDbList = detectionDbDao.queryBuilder().where(DetectionDbDao.Properties.ProjectName.eq(projectName)).orderDesc(DetectionDbDao.Properties.Id).build().list();
             if (detectionDbList.size() != 0) {
+                counts = detectionDbList.size();
                 functionAdapter.setContentList(detectionDbList);
                 functionAdapter.notifyDataSetChanged();
             }
         }
-
+        functionTv.setText(projectName + "(" + counts + ")");
 
     }
 
@@ -186,12 +209,23 @@ public class FunctionPatrolActivity extends AppCompatActivity {
      * @date :2020/5/2  15:47
      */
     public void setExcel(String[] title, String name) {
-        File file = new File(Environment.getExternalStorageDirectory()
-                + File.separator + "A广州天驰管道检测" + File.separator + "EXCEL/QV检测表");
+        File file = new File(Folders.APP_PATH + projectName + "/" + Folders.PICTURE_DATA);
         ExcelUtil.makeDir(file);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = sdf.format(new Date());
-        fileName = file.toString() + "/" + name + "-" + time + ".xls";
+        fileName = file.toString() + name + "-" + time + ".xls";
+        ExcelUtil.initExcel(fileName, title, name + "表");
+    }
+
+    /**
+     * 设置表格
+     *
+     * @Params :
+     * @author :HaiRun
+     * @date :2020/5/2  15:47
+     */
+    public void setExcel2(String[] title, String name) {
+
         ExcelUtil.initExcel(fileName, title, name + "表");
     }
 

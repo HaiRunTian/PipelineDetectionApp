@@ -1,6 +1,8 @@
 package com.me.pipelinedetectionapp.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,9 +12,15 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.drainagemonitoring.greendao.DetectionDbDao;
+import com.example.drainagemonitoring.greendao.PipePSCheckDbDao;
+import com.example.drainagemonitoring.greendao.ProjectDbDao;
 import com.me.pipelinedetectionapp.R;
+import com.me.pipelinedetectionapp.bean.PipePSCheckDb;
 import com.me.pipelinedetectionapp.bean.ProjectDb;
+import com.me.pipelinedetectionapp.config.MyApplication;
 import com.me.pipelinedetectionapp.ui.FunctionPatrolActivity;
+import com.me.pipelinedetectionapp.utils.Folders;
 
 import java.util.List;
 
@@ -58,7 +66,8 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
             String areaName = _arrayList.get(position).getAreaName();
             String testMethod = _arrayList.get(position).getTestMethod();
             String checkMode = _arrayList.get(position).getProjectMode();
-            viewHolder.tvAreaName.setText(_arrayList.get(position).getId() + " -- " + projectName);
+            String id = String.valueOf(_arrayList.get(position).getId());
+            viewHolder.tvAreaName.setText( projectName);
             viewHolder.tvMans.setText(projectNumber);
             viewHolder.tvDate.setText(inspectDate);
             viewHolder.ll.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +82,39 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
                     intent.putExtra("testMethod", testMethod);
                     intent.putExtra("checkMode",checkMode);
                     context.startActivity(intent);
+                }
+            });
+
+            viewHolder.ll.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("弹出警告框");
+                    builder.setMessage("确定删除吗？");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            MyApplication.getApplication().getDaoSession().getProjectDbDao().queryBuilder().
+                                    where(ProjectDbDao.Properties.ProjectName.eq(projectName)).buildDelete().executeDeleteWithoutDetachingEntities();
+                            if (checkMode.equals(Folders.PRJ_MODE1)){
+                                MyApplication.getApplication().getDaoSession().getPipePSCheckDbDao().queryBuilder().
+                                        where(PipePSCheckDbDao.Properties.ProjectName.eq(projectName)).buildDelete().executeDeleteWithoutDetachingEntities();
+                            }else {
+                                MyApplication.getApplication().getDaoSession().getDetectionDbDao().queryBuilder().
+                                        where(DetectionDbDao.Properties.ProjectName.eq(projectName)).buildDelete().executeDeleteWithoutDetachingEntities();
+                            }
+                            _arrayList.remove(position);
+                            notifyDataSetChanged();
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    builder.show();
+                    return true;
                 }
             });
         }

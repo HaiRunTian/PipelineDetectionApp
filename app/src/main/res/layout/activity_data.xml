@@ -4,12 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lucency"
-        android:fitsSystemWindows="true"
-        android:orientation="horizontal">
+        android:layout_height="50dp"
+        android:background="@color/lucency">
 
         <TextView
             android:id="@+id/patrol_return"
@@ -23,15 +21,23 @@
             android:textSize="15dp" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="管道检测"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/requisition_title_small" />
-    </LinearLayout>
+
+        <Button
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/save"
+            style="@style/BtnSendStyle"
+            android:text="保存" />
+
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -198,7 +204,9 @@
                     android:inputType="number|numberDecimal" />
 
             </LinearLayout>
+
             <include layout="@layout/view_item" />
+
             <LinearLayout
                 style="@style/LinearCenterVertical"
                 android:padding="5dp">
@@ -206,17 +214,17 @@
                 <TextView
                     style="@style/TextView"
                     android:text="@string/type" />
+
                 <View
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    />
+                    android:layout_weight="1" />
+
                 <Spinner
                     android:id="@+id/edtPipeType"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:entries="@array/type"
-                    />
+                    android:entries="@array/type" />
             </LinearLayout>
 
             <include layout="@layout/view_item" />
@@ -254,7 +262,7 @@
 
                     <TextView
                         style="@style/TextView"
-                        android:text="管渠规格" />
+                        android:text="管渠规格(mm)" />
                 </LinearLayout>
 
                 <EditText
@@ -276,6 +284,7 @@
 
                     <TextView
                         style="@style/TextView"
+                        android:inputType="number|numberDecimal"
                         android:text="缺陷距离(m)" />
 
                     <EditText
@@ -377,7 +386,7 @@
 
                     <TextView
                         style="@style/TextView"
-                        android:text="检查井问题" />
+                        android:text="问题描述" />
 
                     <View
                         android:layout_width="0dp"
@@ -394,51 +403,51 @@
 
             <include layout="@layout/view_item" />
 
-            <LinearLayout
-                style="@style/LinearCenterVertical"
-                android:padding="5dp">
+            <!-- <LinearLayout
+                 style="@style/LinearCenterVertical"
+                 android:padding="5dp">
 
-                <TextView
-                    style="@style/TextView"
-                    android:text="雨水口问题" />
+                 <TextView
+                     style="@style/TextView"
+                     android:text="雨水口问题" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                 <View
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_weight="1" />
 
-                <Spinner
-                    android:id="@+id/sp_water"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:entries="@array/water" />
-            </LinearLayout>
+                 <Spinner
+                     android:id="@+id/sp_water"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:entries="@array/water" />
+             </LinearLayout>
 
-            <include layout="@layout/view_item" />
+             <include layout="@layout/view_item" />
 
-            <LinearLayout
-                style="@style/LinearCenterVertical"
-                android:padding="5dp">
+             <LinearLayout
+                 style="@style/LinearCenterVertical"
+                 android:padding="5dp">
 
-                <TextView
-                    style="@style/TextView"
-                    android:text="其他问题" />
+                 <TextView
+                     style="@style/TextView"
+                     android:text="其他问题" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                 <View
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_weight="1" />
 
-                <Spinner
-                    android:id="@+id/sp_about"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:entries="@array/about" />
-            </LinearLayout>
+                 <Spinner
+                     android:id="@+id/sp_about"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:entries="@array/about" />
+             </LinearLayout>
 
-            <include layout="@layout/view_item" />
+             <include layout="@layout/view_item" />
 
-            <include layout="@layout/view_item" />
+             <include layout="@layout/view_item" />-->
 
             <LinearLayout
                 style="@style/LinearCenterVertical"
@@ -500,12 +509,6 @@
                     android:textSize="@dimen/personage_text_tiny" />
             </LinearLayout>
 
-            <include layout="@layout/view_item" />
-
-            <Button
-                android:id="@+id/save"
-                style="@style/BtnSendStyle"
-                android:text="保存" />
         </LinearLayout>
 
     </ScrollView>

@@ -3,12 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lucency"
-        android:fitsSystemWindows="true"
-        android:orientation="horizontal">
+        android:layout_height="50dp"
+        android:background="@color/lucency">
 
         <TextView
             android:id="@+id/patrol_return"
@@ -22,36 +21,50 @@
             android:textSize="15dp" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="管道检测"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/requisition_title_small" />
-    </LinearLayout>
+
+        <Button
+            android:id="@+id/save"
+            style="@style/BtnSendStyle"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:text="保存" />
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@drawable/login_bg"
             android:orientation="vertical">
+
             <LinearLayout
                 style="@style/LinearCenterVertical"
                 android:padding="5dp">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         style="@style/TextView"
                         android:text="@string/imageName" />
                 </LinearLayout>
+
                 <EditText
                     android:id="@+id/imageName"
                     style="@style/FunctionEdtStyle" />
@@ -59,17 +72,21 @@
             </LinearLayout>
 
             <include layout="@layout/view_item" />
+
             <LinearLayout
                 style="@style/LinearCenterVertical"
                 android:padding="5dp">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <TextView
-                    style="@style/TextView"
-                    android:text="@string/roadName" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/roadName" />
                 </LinearLayout>
+
                 <EditText
                     android:id="@+id/roadName"
                     style="@style/FunctionEdtStyle" />
@@ -77,17 +94,21 @@
             </LinearLayout>
 
             <include layout="@layout/view_item" />
+
             <LinearLayout
                 style="@style/LinearCenterVertical"
                 android:padding="5dp">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <TextView
-                    style="@style/TextView"
-                    android:text="@string/lineDot" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/lineDot" />
                 </LinearLayout>
+
                 <EditText
                     android:id="@+id/lineDot"
                     style="@style/FunctionEdtStyle" />
@@ -99,14 +120,17 @@
             <LinearLayout
                 style="@style/LinearCenterVertical"
                 android:padding="5dp">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <TextView
-                    style="@style/TextView"
-                    android:text="@string/connectionPoint" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/connectionPoint" />
                 </LinearLayout>
+
                 <EditText
                     android:id="@+id/connectionPoint"
                     style="@style/FunctionEdtStyle" />
@@ -118,19 +142,21 @@
             <LinearLayout
                 style="@style/LinearCenterVertical"
                 android:padding="5dp">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <TextView
-                    style="@style/TextView"
-                    android:text="@string/startingPointOrigin" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/startingPointOrigin" />
                 </LinearLayout>
+
                 <EditText
                     android:id="@+id/startingPointOrigin"
                     style="@style/FunctionEdtStyle"
-                    android:inputType="number|numberDecimal"
-                    />
+                    android:inputType="number|numberDecimal" />
 
             </LinearLayout>
 
@@ -139,19 +165,21 @@
             <LinearLayout
                 style="@style/LinearCenterVertical"
                 android:padding="5dp">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <TextView
-                    style="@style/TextView"
-                    android:text="@string/startingPointEnd" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/startingPointEnd" />
                 </LinearLayout>
+
                 <EditText
                     android:id="@+id/startingPointEnd"
                     style="@style/FunctionEdtStyle"
-                    android:inputType="number|numberDecimal"
-                    />
+                    android:inputType="number|numberDecimal" />
 
             </LinearLayout>
 
@@ -164,17 +192,17 @@
                 <TextView
                     style="@style/TextView"
                     android:text="@string/folwDirection" />
+
                 <View
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    />
+                    android:layout_weight="1" />
+
                 <Spinner
                     android:id="@+id/folwDirection"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:entries="@array/pipe"
-                    />
+                    android:entries="@array/pipe" />
             </LinearLayout>
 
             <include layout="@layout/view_item" />
@@ -182,19 +210,23 @@
             <LinearLayout
                 style="@style/LinearCenterVertical"
                 android:padding="5dp">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <TextView
-                    style="@style/TextView"
-                    android:text="@string/pipeDiameter" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/pipeDiameter" />
                 </LinearLayout>
+
                 <EditText
                     android:id="@+id/pipeDiameter"
                     style="@style/FunctionEdtStyle" />
 
             </LinearLayout>
+
             <include layout="@layout/view_item" />
 
             <LinearLayout
@@ -204,18 +236,19 @@
                 <TextView
                     style="@style/TextView"
                     android:text="@string/pipe" />
+
                 <View
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    />
+                    android:layout_weight="1" />
+
                 <Spinner
                     android:id="@+id/pipe"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:entries="@array/folwDirection"
-                    />
+                    android:entries="@array/folwDirection" />
             </LinearLayout>
+
             <include layout="@layout/view_item" />
 
             <LinearLayout
@@ -225,60 +258,61 @@
                 <TextView
                     style="@style/TextView"
                     android:text="@string/type" />
+
                 <View
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    />
+                    android:layout_weight="1" />
+
                 <Spinner
                     android:id="@+id/type"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:entries="@array/type"
-                    />
+                    android:entries="@array/type" />
             </LinearLayout>
+
             <include layout="@layout/view_item" />
 
             <LinearLayout
                 style="@style/LinearCenterVertical"
                 android:padding="5dp">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <TextView
-                    style="@style/TextView"
-                    android:text="@string/inspectDate" />
+
+                    <TextView
+                        style="@style/TextView"
+                        android:text="@string/inspectDate" />
                 </LinearLayout>
+
                 <EditText
                     android:id="@+id/inspectDate"
                     style="@style/FunctionEdtStyle"
-                    android:focusable="false"
-                    />
+                    android:focusable="false" />
             </LinearLayout>
 
             <include layout="@layout/view_item" />
+
             <TextView
                 style="@style/Requisition_TextStyle"
                 android:padding="5dp"
                 android:text="@string/remark" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/equipment_info_eit">
+
                 <EditText
                     android:id="@+id/remark"
                     style="@style/Requisition_EditText"
-                    android:textSize="@dimen/personage_text_tiny"
                     android:gravity="top"
-                    />
+                    android:textSize="@dimen/personage_text_tiny" />
             </LinearLayout>
-            <include layout="@layout/view_item" />
-            <Button
-                android:id="@+id/save"
-                style="@style/BtnSendStyle"
-                android:text="保存" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

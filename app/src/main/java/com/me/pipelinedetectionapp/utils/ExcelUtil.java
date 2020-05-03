@@ -2,11 +2,15 @@ package com.me.pipelinedetectionapp.utils;
 
 import android.content.Context;
 import android.widget.Toast;
+
 import com.me.pipelinedetectionapp.bean.DetectionDb;
+import com.me.pipelinedetectionapp.bean.PipePSCheckDb;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -34,6 +38,7 @@ public class ExcelUtil {
     private static WritableCellFormat arial12format = null;
     private final static String UTF8_ENCODING = "UTF-8";
     private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateTimeUtil.DATE_FORMAT_YYYYMMDD_HHMMSS);
+
     /**
      * 单元格的格式设置 字体大小 颜色 对齐方式、背景颜色等...
      */
@@ -108,18 +113,18 @@ public class ExcelUtil {
 
     /**
      * 实时历史数据Excel导出
-     * @param list  表的数据
-     * @param time
-     * @param fileName 表的名称
-     * @param name
+     *
+     * @param list          表的数据
+     * @param fileName      表的名称
+     * @param
      * @param projectName
      * @param projectNumber
      * @param inspectorName
      * @param registrarName
-     * @param areaName
+     * @param method
      * @param c
      */
-    public static void QvListToExcel(List<DetectionDb> list,String fileName, String name, String projectName, String projectNumber, String inspectorName, String registrarName, String areaName,  String time, Context c) {
+    public static void QvListToExcel(List<DetectionDb> list, String fileName, String projectName, String projectNumber, String inspectorName, String registrarName, String areaName, String method, Context c) {
         if (list != null && list.size() > 0) {
             WritableWorkbook writebook = null;
             InputStream in = null;
@@ -134,29 +139,111 @@ public class ExcelUtil {
                 for (int i = 0; i < list.size(); i++) {
                     DetectionDb detectionDb = list.get(i);
                     int j = i + 1;
-                    sheet.addCell(new Label(0, j, name, arial12format));
-                    sheet.addCell(new Label(1, j,projectName, arial12format));
+                    sheet.addCell(new Label(0, j, String.valueOf(j), arial12format));
+                    sheet.addCell(new Label(1, j, projectName, arial12format));
                     sheet.addCell(new Label(2, j, projectNumber, arial12format));
-                    sheet.addCell(new Label(3, j, inspectorName, arial12format));
-                    sheet.addCell(new Label(4, j, registrarName, arial12format));
-                    sheet.addCell(new Label(5, j,areaName, arial12format));
-                    sheet.addCell(new Label(6, j, detectionDb.getRoadName(), arial12format));
-                    sheet.addCell(new Label(7, j, detectionDb.getLineDot(), arial12format));
-                    sheet.addCell(new Label(8, j,detectionDb.getConnectionPoint() , arial12format));
-                    sheet.addCell(new Label(9, j,detectionDb.getStartingPointOrigin() , arial12format));
-                    sheet.addCell(new Label(10,j, detectionDb.getStartingPointEnd(), arial12format));
-                    sheet.addCell(new Label(11,j, detectionDb.getFolwDirection(), arial12format));
-                    sheet.addCell(new Label(12,j, detectionDb.getPipe(), arial12format));
-                    sheet.addCell(new Label(13,j, detectionDb.getPipeDiameter(), arial12format));
-                    sheet.addCell(new Label(14,j, detectionDb.getType(), arial12format));
-                    sheet.addCell(new Label(15,j, time));
-                    sheet.addCell(new Label(16,j, detectionDb.getRemark(), arial12format));
+                    sheet.addCell(new Label(3, j, areaName, arial12format));
+                    sheet.addCell(new Label(4, j, method, arial12format));
+                    sheet.addCell(new Label(5, j, inspectorName, arial12format));
+                    sheet.addCell(new Label(6, j, registrarName, arial12format));
+                    sheet.addCell(new Label(7, j, detectionDb.getImageName(), arial12format));
+                    sheet.addCell(new Label(8, j, detectionDb.getRoadName(), arial12format));
+                    sheet.addCell(new Label(9, j, detectionDb.getLineDot(), arial12format));
+                    sheet.addCell(new Label(10, j, detectionDb.getConnectionPoint(), arial12format));
+                    sheet.addCell(new Label(11, j, detectionDb.getStartingPointOrigin(), arial12format));
+                    sheet.addCell(new Label(12, j, detectionDb.getStartingPointEnd(), arial12format));
+                    sheet.addCell(new Label(13, j, detectionDb.getFolwDirection(), arial12format));
+                    sheet.addCell(new Label(14, j, detectionDb.getPipe(), arial12format));
+                    sheet.addCell(new Label(15, j, detectionDb.getPipeDiameter(), arial12format));
+                    sheet.addCell(new Label(16, j, detectionDb.getType(), arial12format));
+                    sheet.addCell(new Label(17, j, DateTimeUtil.getCurrentTime(detectionDb.getInspectDate(), DateTimeUtil.DATE_FORMAT_YYYYMMDD_HHMMSS)));
+                    sheet.addCell(new Label(18, j, detectionDb.getRemark(), arial12format));
                 }
                 for (int i = 0; i < sheet.getColumns(); i++) {
                     sheet.setColumnView(i, 25);
                 }
                 writebook.write();
-                Toast.makeText(c, "导出Excel成功," + Folders.PATH, Toast.LENGTH_LONG).show();
+                Toast.makeText(c, "导出Excel成功," + fileName, Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (writebook != null) {
+                    try {
+                        writebook.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 实时历史数据Excel导出
+     *
+     * @param list          表的数据
+     * @param fileName      表的名称
+     * @param areaName
+     * @param projectName
+     * @param projectNumber
+     * @param inspectorName
+     * @param registrarName
+     * @param method
+     * @param c
+     */
+    public static void QvListToExcel2(List<PipePSCheckDb> list, String fileName, String projectName, String projectNumber, String inspectorName, String registrarName, String areaName, String method, Context c) {
+        if (list != null && list.size() > 0) {
+            WritableWorkbook writebook = null;
+            InputStream in = null;
+            try {
+                WorkbookSettings setEncode = new WorkbookSettings();
+                setEncode.setEncoding(UTF8_ENCODING);
+                in = new FileInputStream(new File(fileName));
+                Workbook workbook = Workbook.getWorkbook(in);
+                writebook = Workbook.createWorkbook(new File(fileName), workbook);
+                WritableSheet sheet = writebook.getSheet(0);
+
+                for (int i = 0; i < list.size(); i++) {
+                    PipePSCheckDb detectionDb = list.get(i);
+                    int j = i + 1;
+                    sheet.addCell(new Label(0, j, String.valueOf(j), arial12format));
+                    sheet.addCell(new Label(1, j, projectName, arial12format));
+                    sheet.addCell(new Label(2, j, projectNumber, arial12format));
+                    sheet.addCell(new Label(3, j, areaName, arial12format));
+                    sheet.addCell(new Label(4, j, method, arial12format));
+                    sheet.addCell(new Label(5, j, inspectorName, arial12format));
+                    sheet.addCell(new Label(6, j, registrarName, arial12format));
+                    sheet.addCell(new Label(7, j, detectionDb.getImageName(), arial12format));
+                    sheet.addCell(new Label(8, j, detectionDb.getRoadName(), arial12format));
+                    sheet.addCell(new Label(9, j, detectionDb.getLineDot(), arial12format));
+                    sheet.addCell(new Label(10, j, detectionDb.getConnectionPoint(), arial12format));
+                    sheet.addCell(new Label(11, j, detectionDb.getCheckLength(), arial12format));
+                    sheet.addCell(new Label(12, j, detectionDb.getFlow(), arial12format));
+                    sheet.addCell(new Label(13, j, detectionDb.getFullness(), arial12format));
+                    sheet.addCell(new Label(14, j, detectionDb.getPipeMaterials(), arial12format));
+                    sheet.addCell(new Label(15, j, detectionDb.getPipeSize(), arial12format));
+                    sheet.addCell(new Label(16, j, detectionDb.getPipeType(), arial12format));
+                    sheet.addCell(new Label(17, j, detectionDb.getDefectLength()));
+                    sheet.addCell(new Label(18, j, detectionDb.getDefectCode(), arial12format));
+                    sheet.addCell(new Label(19, j, detectionDb.getDefectGrade(), arial12format));
+                    sheet.addCell(new Label(20, j, detectionDb.getHybrid(), arial12format));
+                    sheet.addCell(new Label(21, j, detectionDb.getWellQuestion(), arial12format));
+                    sheet.addCell(new Label(22, j, detectionDb.getPicture(), arial12format));
+                    sheet.addCell(new Label(23, j, detectionDb.getLocal(), arial12format));
+                    sheet.addCell(new Label(24, j, detectionDb.getRemark(), arial12format));
+                }
+                for (int i = 0; i < sheet.getColumns(); i++) {
+                    sheet.setColumnView(i, 25);
+                }
+                writebook.write();
+                Toast.makeText(c, "导出Excel成功," + fileName, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

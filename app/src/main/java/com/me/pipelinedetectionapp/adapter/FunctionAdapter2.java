@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.drainagemonitoring.greendao.PipePSCheckDbDao;
+import com.example.drainagemonitoring.greendao.ProjectDbDao;
 import com.me.pipelinedetectionapp.R;
 import com.me.pipelinedetectionapp.bean.DetectionDb;
 import com.me.pipelinedetectionapp.bean.PipePSCheckDb;
@@ -86,7 +88,8 @@ public class FunctionAdapter2 extends RecyclerView.Adapter<FunctionAdapter2.View
                         public void onClick(DialogInterface dialog, int which) {
                             PipePSCheckDb detectionDb = new PipePSCheckDb();
                             detectionDb.setId(Long.valueOf(id));
-                            MyApplication.getApplication().getDaoSession().getPipePSCheckDbDao().delete(detectionDb);
+                            MyApplication.getApplication().getDaoSession().getPipePSCheckDbDao().queryBuilder()
+                                    .where(PipePSCheckDbDao.Properties.Id.eq(id)).buildDelete().executeDeleteWithoutDetachingEntities();
                             _arrayList.remove(position);
                             notifyDataSetChanged();
                         }

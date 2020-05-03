@@ -76,6 +76,17 @@
         <item>JF树根</item>
         <item>JG盖框间高差和间隙超限</item>
         <item>JH错盖</item>
+        <item>KA破损</item>
+        <item>KB塌陷</item>
+        <item>KC渗漏</item>
+        <item>KD抹面剥落</item>
+        <item>KE树根</item>
+        <item>KF盖框间高差和间隙超限</item>
+        <item>KG孔眼堵塞</item>
+        <item>KH异臭</item>
+        <item>QA排水管渠管顶覆土是否疏松</item>
+        <item>QB井盖是否被占压</item>
+        <item>QC原废旧管及雨水篦检查井是否拆除或填埋</item>
     </string-array>
 
     <!--    雨水口问题-->

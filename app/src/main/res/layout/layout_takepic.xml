@@ -20,7 +20,7 @@
                 android:id="@+id/btnAddPic"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@mipmap/ic_add_32px"/>
+                android:background="@mipmap/ic_add_img_32px"/>
 
             <TextView
                 android:layout_width="wrap_content"

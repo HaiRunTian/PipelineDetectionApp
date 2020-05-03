@@ -78,10 +78,10 @@
 
     <style name="TextView">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_height">35dp</item>
         <item name="android:textSize">@dimen/personage_text_tiny</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_margin">2dp</item>
     </style>
 
     <style name="FunctionEdtStyle">
@@ -102,13 +102,13 @@
     </style>
 
     <style name="BtnSendStyle">
-        <item name="android:layout_width">200dp</item>
-        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">30dp</item>
         <item name="android:background">@drawable/send_button</item>
         <item name="android:textSize">@dimen/personage_text_tiny</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:layout_margin">30dp</item>
     </style>
 
     <style name="Requisition_EditText">

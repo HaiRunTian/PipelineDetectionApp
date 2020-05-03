@@ -1,13 +1,30 @@
 package com.me.pipelinedetectionapp.ui;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,13 +34,20 @@ import com.example.drainagemonitoring.greendao.PipePSCheckDbDao;
 import com.me.pipelinedetectionapp.R;
 import com.me.pipelinedetectionapp.bean.PipePSCheckDb;
 import com.me.pipelinedetectionapp.config.MyApplication;
+import com.me.pipelinedetectionapp.utils.CameraUtils;
 import com.me.pipelinedetectionapp.utils.DateTimeUtil;
+import com.me.pipelinedetectionapp.utils.FileUtils;
+import com.me.pipelinedetectionapp.utils.Folders;
+import com.me.pipelinedetectionapp.utils.MyAlertDialog;
 import com.me.pipelinedetectionapp.utils.SpinnerDropdownListManager;
 import com.me.pipelinedetectionapp.view.DataInterface;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,7 +59,7 @@ import butterknife.Unbinder;
  * @author HaiRun
  * @time 2020/5/2.12:00
  */
-public class CollecDataActivity extends AppCompatActivity implements DataInterface {
+public class CollecDataActivity extends AppCompatActivity implements DataInterface, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     @BindView(R.id.patrol_return)
     TextView patrolReturn;
@@ -67,10 +91,10 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
     EditText edtHybrid;
     @BindView(R.id.sp_well)
     Spinner spWell;
-    @BindView(R.id.sp_water)
+  /*  @BindView(R.id.sp_water)
     Spinner spWater;
     @BindView(R.id.sp_about)
-    Spinner spAbout;
+    Spinner spAbout;*/
     @BindView(R.id.edt_locat)
     EditText edtLocat;
     @BindView(R.id.inspectDate)
@@ -90,6 +114,29 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
     private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateTimeUtil.DATE_FORMAT_YYYYMMDD_HHMMSS);
     private DaoSession daoSession;
     private String projectName;
+    //拍照相关 全部照片名字
+    private String mPictureName = "";
+    private int m_picIndex = 0;
+    private File m_pictureName;
+    private Uri fileUri;
+    private Bitmap picBitmap;
+    //单张照片名字
+    private String pictureName;
+    /**
+     * 临时图片文件名数组
+     */
+    private List<String> picNames;
+    /**
+     * 临时图片文件数组
+     */
+    private List<File> picFiles;
+    private ArrayList<HashMap<String, Object>> imageItem;
+    //照片
+    private List<String> m_listPicName;
+    /**
+     * //适配器
+     */
+    private SimpleAdapter simpleAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +146,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
         daoSession = MyApplication.getApplication().getDaoSession();
         id = getIntent().getStringExtra("id");
         projectName = getIntent().getStringExtra("projectName");
+        initView();
         initSpinnerAdapter();
         //查询
         if (id != null) {
@@ -120,6 +168,53 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
             }
         }
 
+    }
+
+    /**
+     * 初始化拍照区域
+     *
+     * @Params :
+     * @author :HaiRun
+     * @date :2020/3/14  12:58
+     */
+    private void initView() {
+        picFiles = new ArrayList<>();
+        picNames = new ArrayList<>();
+        imageItem = new ArrayList<>();
+        gridView.setOnItemClickListener(this);
+        gridView.setOnItemLongClickListener(this);
+
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+        MyAlertDialog.showAlertDialog(this, "删除提示", "确定删除改照片？", "确定", "取消", true,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //从手机卡删除
+//                        FileUtils.getInstance().deleteFile(picFiles.get(position));
+                        imageItem.remove(position);
+                        picNames.remove(position);
+                        picFiles.remove(position);
+                        refreshGridviewAdapter();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        return true;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        if (view.getId() != -1) {
+        } else {
+            viewPicture(position);
+        }
     }
 
     /**
@@ -145,8 +240,8 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
             setDefectGrade(list.get(0).getDefectGrade());
             setHybrid(list.get(0).getHybrid());
             setWell(list.get(0).getWellQuestion());
-            setWater(list.get(0).getWaterQuestion());
-            setAbout(list.get(0).getAboutQuestion());
+           /* setWater(list.get(0).getWaterQuestion());
+            setAbout(list.get(0).getAboutQuestion());*/
             setImg(list.get(0).getPicture());
             setLocal(list.get(0).getLocal());
             setRemark(list.get(0).getRemark());
@@ -174,9 +269,6 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
         pipe.setAdapter(adapter);
         //代码
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.defect));
-        pipe.setAdapter(adapter);
-        //代码
-        adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.defect));
         spCode.setAdapter(adapter);
         //等级
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.grade));
@@ -184,12 +276,12 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
         //检查井问题
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.well));
         spWell.setAdapter(adapter);
-        //雨水口问题
+       /* //雨水口问题
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.water));
         spWater.setAdapter(adapter);
         //其他问题
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.about));
-        spAbout.setAdapter(adapter);
+        spAbout.setAdapter(adapter);*/
         //管类
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.type));
         edtPipeType.setAdapter(adapter);
@@ -200,18 +292,172 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.patrol_return:
+                finish();
                 break;
             case R.id.save:
                 insertSql();
                 break;
 
             case R.id.btnAddPic:
-
+                //拍照逻辑
+                openCamera();
                 break;
             default:
                 break;
         }
     }
+
+    /**
+     * 拍照
+     *
+     * @Params :
+     * @author :HaiRun
+     * @date :2020/3/18  16:29
+     */
+    private void openCamera() {
+        if (!hasPermission()) {
+            return;
+        }
+        if (id != null) {
+            //照片转成
+            List<String> list = Arrays.asList(getImg().split("#"));
+            if (list.size() != 0) {
+                m_picIndex = list.size();
+            }
+        }
+        m_picIndex++;
+        //照片名字
+        String name = Folders.APP_PATH + "/" + projectName + "/" + Folders.PICTURE_DATA + getStartPoint() + "_" + getEndtPoint() + "_" + m_picIndex + ".jpg";
+        m_pictureName = new File(name);
+        m_pictureName.getParentFile().mkdirs();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //步骤二：Android 7.0及以上获取文件 Uri
+            fileUri = FileProvider.getUriForFile(this, "com.me.pipelinedetectionapp", m_pictureName);
+        } else {
+            //步骤三：获取文件Uri
+            fileUri = Uri.fromFile(m_pictureName);
+        }
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        startActivityForResult(intent, CameraUtils.PHOTO_REQUEST_TAKEPHOTO);
+    }
+
+    /**
+     * 检查权限
+     *
+     * @Params :
+     * @author :HaiRun
+     * @date :2020/3/19  11:41
+     */
+    private boolean hasPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, CameraUtils.PHOTO_REQUEST_TAKEPHOTO);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * 查看图片
+     */
+    private void viewPicture(int position) {
+        if (picFiles.get(position) != null) {
+            File file = picFiles.get(position);
+            //打开照片查看
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri _uri;
+            if (Build.VERSION.SDK_INT >= 24) {
+                _uri = FileProvider.getUriForFile(getApplicationContext(), "com.me.pipelinedetectionapp", file);
+            } else {
+                _uri = Uri.fromFile(file);
+            }
+            intent.setDataAndType(_uri, CameraUtils.IMAGE_UNSPECIFIED);
+            startActivity(intent);
+        }
+    }
+
+
+    //手机拍照回调
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            switch (requestCode) {
+                case CameraUtils.PHOTO_REQUEST_TAKEPHOTO:
+                    picBitmap = BitmapFactory.decodeFile(m_pictureName.getAbsolutePath());
+                    picBitmap = CameraUtils.comp(picBitmap);
+                    if (picBitmap != null) {
+                        //拍摄返回的图片name
+                        pictureName = m_pictureName.getName();
+                        picNames.add(pictureName);
+                        picFiles.add(m_pictureName);
+                        HashMap<String, Object> _map = new HashMap<>();
+                        _map.put("itemImage", picBitmap);
+                        _map.put("picName", pictureName);
+                        imageItem.add(_map);
+                        refreshGridviewAdapter();
+                    } else {
+                        Toast.makeText(this, "图片名不允许带特殊符号", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "拍照失败", Toast.LENGTH_SHORT);
+        }
+    }
+
+    /**
+     * 更新照片
+     *
+     * @Params :
+     * @author :HaiRun
+     * @date :2020/5/3  10:56
+     */
+    private void refreshGridviewAdapter() {
+        if (simpleAdapter == null) {
+            simpleAdapter = new SimpleAdapter(this, imageItem, R.layout.layout_griditem_addpic,
+                    new String[]{"itemImage", "picName"}, new int[]{R.id.imageView1, R.id.tvPicName});
+            simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+                @Override
+                public boolean setViewValue(final View view, final Object data, String textRepresentation) {
+                    if (view instanceof ImageView && data instanceof Bitmap) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {//绑定视图
+                                ImageView i = (ImageView) view;
+                                i.setImageBitmap((Bitmap) data);
+                            }
+                        });
+                        return true;
+                    } else if (view instanceof TextView) {
+                        TextView tv = (TextView) view;
+                        tv.setText(textRepresentation);
+                        return true;
+                    }
+
+                    return false;
+                }
+            });
+        }
+        //主线程绑定adapter刷新数据
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                gridView.setAdapter(simpleAdapter);
+                simpleAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 
     /**
      * 保存数据到数据库
@@ -237,8 +483,8 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
         pipePSCheckDb.setDefectGrade(getDefectGrade());
         pipePSCheckDb.setHybrid(getHybrid());
         pipePSCheckDb.setWellQuestion(getWell());
-        pipePSCheckDb.setWaterQuestion(getWater());
-        pipePSCheckDb.setAboutQuestion(getAbout());
+      /*  pipePSCheckDb.setWaterQuestion(getWater());
+        pipePSCheckDb.setAboutQuestion(getAbout());*/
         pipePSCheckDb.setPicture(getImg());
         pipePSCheckDb.setLocal(getLocal());
         pipePSCheckDb.setRemark(getRemark());
@@ -598,7 +844,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public String getWater() {
-        return spWater.getSelectedItem().toString();
+        return null;
     }
 
     /**
@@ -618,7 +864,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public String getAbout() {
-        return spAbout.getSelectedItem().toString();
+        return null;
     }
 
     /**
@@ -628,7 +874,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public void setAbout(String about) {
-        SpinnerDropdownListManager.setSpinnerItemSelectedByValue(spAbout, about);
+//        SpinnerDropdownListManager.setSpinnerItemSelectedByValue(spAbout, about);
     }
 
     /**
@@ -638,7 +884,18 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public String getImg() {
-        return null;
+        String jointPictureName = "";
+        if (picFiles.size() == 0) {
+            jointPictureName = "";
+        } else if (picFiles.size() == 1) {
+            jointPictureName = picFiles.get(0).getName();
+        } else {
+            for (File _picFile : picFiles) {
+                jointPictureName += _picFile.getName() + "#";
+            }
+            jointPictureName = jointPictureName.substring(0, jointPictureName.length() - 1);
+        }
+        return jointPictureName;
     }
 
     /**
@@ -648,7 +905,36 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public void setImg(String img) {
+        if (img != null) {
+            m_listPicName = getPicturefromReSet(img);
+            if (m_listPicName.size() > 0) {
+                m_picIndex = m_listPicName.size();
+                for (String _s : m_listPicName) {
+                    boolean isExsit = FileUtils.getInstance().isFileExsit(Folders.APP_PATH + "/" + projectName + "/" + Folders.PICTURE_DATA + _s);
+                    if (!isExsit) {
+                        Toast.makeText(this, "此图片不存在 =" + _s, Toast.LENGTH_SHORT).show();
+                        continue;
+                    }
+                    picNames.add(_s);
+                    picFiles.add(new File(Folders.APP_PATH + "/" + projectName + "/" + Folders.PICTURE_DATA + _s));
+                    Bitmap _bitmap = CameraUtils.getimage(Folders.APP_PATH + "/" + projectName + "/" + Folders.PICTURE_DATA + _s);
+                    HashMap<String, Object> _map = new HashMap<>();
+                    _map.put("itemImage", _bitmap);
+                    _map.put("picName", _s);
+                    imageItem.add(_map);
+                    refreshGridviewAdapter();
+                }
+            }
+        }
+    }
 
+    //获取
+    public List<String> getPicturefromReSet(String photoName) {
+        List<String> _list = new ArrayList<>();
+        if (!photoName.isEmpty()) {
+            _list.addAll(Arrays.asList(photoName.split("#")));
+        }
+        return _list;
     }
 
     /**
@@ -689,5 +975,15 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
     @Override
     public void setRemark(String s) {
         remark.setText(s);
+    }
+
+    /**
+     * Called when pointer capture is enabled or disabled for the current window.
+     *
+     * @param hasCapture True if the window has pointer capture.
+     */
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

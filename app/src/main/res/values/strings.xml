@@ -1,6 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">排水检测</string>
-
     <string name="areaName">区域</string>
     <string name="roadName">道路名称</string>
     <string name="imageName">影像编号</string>
