@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         RelativeLayout layoutSplash=(RelativeLayout) findViewById(R.id.activity_splash);
         AlphaAnimation alphaAnimation=new AlphaAnimation(0.1f,1.0f);
-        alphaAnimation.setDuration(1000);//设置动画播放时长1000毫秒（1秒）
+        alphaAnimation.setDuration(1500);//设置动画播放时长1000毫秒（1秒）
         layoutSplash.startAnimation(alphaAnimation);
         //设置动画监听
         alphaAnimation.setAnimationListener(new Animation.AnimationListener() {

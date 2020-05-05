@@ -54,7 +54,7 @@ public class FunctionPatrolActivity extends AppCompatActivity {
 
     private String[] title2 = {"序号", "工程名称", "项目编号", "区域", "检测方法", "检测员", "记录员","影像编号",
             "道路名称", "起始设施编号", "终止设施编号", "检测长度", "流向", "充满度(%)", "管材", "管渠规格(mm)", "管类",
-            "缺陷距离", "缺陷代码", "缺陷等级", "雨污混接情况", "检查井、雨水口及其他问题", "照片编号", "位置", "备注"};
+            "缺陷距离", "缺陷代码", "缺陷等级", "雨污混接情况", "检查井问题", "雨水井问题","其他问题","照片编号", "位置", "备注"};
 
     private String fileName;
     private List<DetectionDb> detectionDbList;

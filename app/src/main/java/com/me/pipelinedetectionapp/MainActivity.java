@@ -7,11 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
 import com.me.pipelinedetectionapp.fragment.HomeFragment;
 import com.me.pipelinedetectionapp.fragment.PersonalFragment;
 import com.me.pipelinedetectionapp.utils.PermissionUtils;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

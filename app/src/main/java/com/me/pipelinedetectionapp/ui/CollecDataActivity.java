@@ -91,10 +91,10 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
     EditText edtHybrid;
     @BindView(R.id.sp_well)
     Spinner spWell;
-  /*  @BindView(R.id.sp_water)
+    @BindView(R.id.sp_water)
     Spinner spWater;
     @BindView(R.id.sp_about)
-    Spinner spAbout;*/
+    Spinner spAbout;
     @BindView(R.id.edt_locat)
     EditText edtLocat;
     @BindView(R.id.inspectDate)
@@ -193,7 +193,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //从手机卡删除
-//                        FileUtils.getInstance().deleteFile(picFiles.get(position));
+                        FileUtils.getInstance().deleteFile(picFiles.get(position));
                         imageItem.remove(position);
                         picNames.remove(position);
                         picFiles.remove(position);
@@ -240,11 +240,12 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
             setDefectGrade(list.get(0).getDefectGrade());
             setHybrid(list.get(0).getHybrid());
             setWell(list.get(0).getWellQuestion());
-           /* setWater(list.get(0).getWaterQuestion());
-            setAbout(list.get(0).getAboutQuestion());*/
+            setWater(list.get(0).getWaterQuestion());
+            setAbout(list.get(0).getAboutQuestion());
             setImg(list.get(0).getPicture());
             setLocal(list.get(0).getLocal());
             setRemark(list.get(0).getRemark());
+            setPipeType(list.get(0).getPipeType());
             inspectDate.setText(simpleDateFormat.format(list.get(0).getInspectDate()));
         } catch (Exception e) {
             Toast.makeText(CollecDataActivity.this, e.toString(), Toast.LENGTH_LONG).show();
@@ -276,12 +277,12 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
         //检查井问题
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.well));
         spWell.setAdapter(adapter);
-       /* //雨水口问题
+        //雨水口问题
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.water));
         spWater.setAdapter(adapter);
         //其他问题
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.about));
-        spAbout.setAdapter(adapter);*/
+        spAbout.setAdapter(adapter);
         //管类
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.type));
         edtPipeType.setAdapter(adapter);
@@ -483,8 +484,8 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
         pipePSCheckDb.setDefectGrade(getDefectGrade());
         pipePSCheckDb.setHybrid(getHybrid());
         pipePSCheckDb.setWellQuestion(getWell());
-      /*  pipePSCheckDb.setWaterQuestion(getWater());
-        pipePSCheckDb.setAboutQuestion(getAbout());*/
+        pipePSCheckDb.setWaterQuestion(getWater());
+        pipePSCheckDb.setAboutQuestion(getAbout());
         pipePSCheckDb.setPicture(getImg());
         pipePSCheckDb.setLocal(getLocal());
         pipePSCheckDb.setRemark(getRemark());
@@ -844,7 +845,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public String getWater() {
-        return null;
+        return spWater.getSelectedItem().toString();
     }
 
     /**
@@ -854,7 +855,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public void setWater(String water) {
-        SpinnerDropdownListManager.setSpinnerItemSelectedByValue(spWell, water);
+        SpinnerDropdownListManager.setSpinnerItemSelectedByValue(spWater, water);
     }
 
     /**
@@ -864,7 +865,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public String getAbout() {
-        return null;
+        return spAbout.getSelectedItem().toString();
     }
 
     /**
@@ -874,7 +875,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public void setAbout(String about) {
-//        SpinnerDropdownListManager.setSpinnerItemSelectedByValue(spAbout, about);
+        SpinnerDropdownListManager.setSpinnerItemSelectedByValue(spAbout, about);
     }
 
     /**

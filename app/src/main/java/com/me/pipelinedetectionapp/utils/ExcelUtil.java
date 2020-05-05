@@ -235,9 +235,11 @@ public class ExcelUtil {
                     sheet.addCell(new Label(19, j, detectionDb.getDefectGrade(), arial12format));
                     sheet.addCell(new Label(20, j, detectionDb.getHybrid(), arial12format));
                     sheet.addCell(new Label(21, j, detectionDb.getWellQuestion(), arial12format));
-                    sheet.addCell(new Label(22, j, detectionDb.getPicture(), arial12format));
-                    sheet.addCell(new Label(23, j, detectionDb.getLocal(), arial12format));
-                    sheet.addCell(new Label(24, j, detectionDb.getRemark(), arial12format));
+                    sheet.addCell(new Label(22, j, detectionDb.getWaterQuestion(), arial12format));
+                    sheet.addCell(new Label(23, j, detectionDb.getAboutQuestion(), arial12format));
+                    sheet.addCell(new Label(24, j, detectionDb.getPicture(), arial12format));
+                    sheet.addCell(new Label(25, j, detectionDb.getLocal(), arial12format));
+                    sheet.addCell(new Label(26, j, detectionDb.getRemark(), arial12format));
                 }
                 for (int i = 0; i < sheet.getColumns(); i++) {
                     sheet.setColumnView(i, 25);
