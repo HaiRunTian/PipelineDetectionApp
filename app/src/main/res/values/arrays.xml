@@ -90,9 +90,8 @@
 
     <!--    其他问题-->
     <string-array name="about">
-
-        <item>排水管渠管顶覆土是否疏松</item>
-        <item>井盖是否被占压</item>
+        <item>排水管渠管顶覆土疏松</item>
+        <item>井盖被占压</item>
         <item>原废旧管被拆除</item>
         <item>原雨水篦被填埋</item>
         <item>原检查井被填埋</item>
