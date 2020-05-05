@@ -46,7 +46,6 @@
 
     <!--    缺陷代码-->
     <string-array name="defect">
-        <item></item>
         <item>破裂</item>
         <item>变形</item>
         <item>腐蚀</item>
@@ -67,7 +66,6 @@
 
     <!--    检查井问题-->
     <string-array name="well">
-        <item></item>
         <item>破损</item>
         <item>塌陷</item>
         <item>渗漏</item>
@@ -80,7 +78,6 @@
 
     <!--    雨水口问题-->
     <string-array name="water">
-        <item></item>
         <item>破损</item>
         <item>塌陷</item>
         <item>渗漏</item>
@@ -93,10 +90,12 @@
 
     <!--    其他问题-->
     <string-array name="about">
-        <item></item>
+
         <item>排水管渠管顶覆土是否疏松</item>
         <item>井盖是否被占压</item>
-        <item>原废旧管及雨水篦检查井是否拆除或填埋</item>
+        <item>原废旧管被拆除</item>
+        <item>原雨水篦被填埋</item>
+        <item>原检查井被填埋</item>
     </string-array>
 
     <string-array name="grade">

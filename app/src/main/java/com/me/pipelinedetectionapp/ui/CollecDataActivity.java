@@ -2,10 +2,10 @@ package com.me.pipelinedetectionapp.ui;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,16 +84,10 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
     EditText pipeDiameter;
     @BindView(R.id.defectLength)
     EditText defectLength;
-    @BindView(R.id.sp_code)
-    Spinner spCode;
     @BindView(R.id.sp_grade)
     Spinner spGrade;
     @BindView(R.id.edt_hybrid)
     EditText edtHybrid;
-    @BindView(R.id.sp_well)
-    Spinner spWell;
-    @BindView(R.id.sp_water)
-    Spinner spWater;
     @BindView(R.id.sp_about)
     Spinner spAbout;
     @BindView(R.id.edt_locat)
@@ -110,6 +105,12 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
     Unbinder bundle;
     @BindView(R.id.edtPipeType)
     Spinner edtPipeType;
+    @BindView(R.id.edtDefecCode)
+    EditText edtDefecCode;
+    @BindView(R.id.edtwell)
+    EditText edtwell;
+    @BindView(R.id.edtwater)
+    EditText edtwater;
     private String id;
     private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateTimeUtil.DATE_FORMAT_YYYYMMDD_HHMMSS);
     private DaoSession daoSession;
@@ -164,7 +165,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
                 setPipeMaterials(list.get(0).getPipeMaterials());
                 setPipeSize(list.get(0).getPipeSize());
                 setFullness(list.get(0).getFullness());
-                setChenkLength(list.get(0).getCheckLength());
+//                setChenkLength(list.get(0).getCheckLength());
             }
         }
 
@@ -268,18 +269,18 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
         //管材
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.folwDirection));
         pipe.setAdapter(adapter);
-        //代码
+       /* //代码
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.defect));
-        spCode.setAdapter(adapter);
+        spCode.setAdapter(adapter);*/
         //等级
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.grade));
         spGrade.setAdapter(adapter);
-        //检查井问题
+      /*  //检查井问题
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.well));
         spWell.setAdapter(adapter);
         //雨水口问题
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.water));
-        spWater.setAdapter(adapter);
+        spWater.setAdapter(adapter);*/
         //其他问题
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.about));
         spAbout.setAdapter(adapter);
@@ -289,7 +290,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
 
     }
 
-    @OnClick({R.id.save, R.id.patrol_return, R.id.btnAddPic})
+    @OnClick({R.id.save, R.id.patrol_return, R.id.btnAddPic, R.id.ibCode, R.id.ibwater, R.id.ibwell})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.patrol_return:
@@ -302,6 +303,18 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
             case R.id.btnAddPic:
                 //拍照逻辑
                 openCamera();
+                break;
+
+            case R.id.ibCode:
+                showDialog(getResources().getStringArray(R.array.defect),edtDefecCode,"缺陷代码");
+                break;
+
+            case R.id.ibwell:
+                showDialog(getResources().getStringArray(R.array.well),edtwell,"检查井问题");
+                break;
+
+            case R.id.ibwater:
+                showDialog(getResources().getStringArray(R.array.water),edtwater,"雨水口问题");
                 break;
             default:
                 break;
@@ -458,7 +471,6 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
             }
         });
     }
-
 
     /**
      * 保存数据到数据库
@@ -765,7 +777,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public String getDefectCode() {
-        return spCode.getSelectedItem().toString();
+        return edtDefecCode.getText().toString();
     }
 
     /**
@@ -775,7 +787,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public void setDefectCode(String code) {
-        SpinnerDropdownListManager.setSpinnerItemSelectedByValue(spCode, code);
+        edtDefecCode.setText(code);
     }
 
     /**
@@ -825,7 +837,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public String getWell() {
-        return spWell.getSelectedItem().toString();
+        return edtwell.getText().toString();
     }
 
     /**
@@ -835,7 +847,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public void setWell(String well) {
-        SpinnerDropdownListManager.setSpinnerItemSelectedByValue(spWell, well);
+        edtwell.setText(well);
     }
 
     /**
@@ -845,7 +857,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public String getWater() {
-        return spWater.getSelectedItem().toString();
+        return edtwater.getText().toString();
     }
 
     /**
@@ -855,7 +867,7 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
      */
     @Override
     public void setWater(String water) {
-        SpinnerDropdownListManager.setSpinnerItemSelectedByValue(spWater, water);
+        edtwater.setText(water);
     }
 
     /**
@@ -987,4 +999,71 @@ public class CollecDataActivity extends AppCompatActivity implements DataInterfa
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+    /**
+     * 多选
+     *
+     * @Params :
+     * @author :HaiRun
+     * @date :2019/7/10  15:12
+     */
+    private void showDialog(final String[] data, final TextView textView, String title) {
+        textView.setText("");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT);
+        builder.setTitle(title);
+        Map<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+        final boolean[] selectItems = new boolean[data.length];
+        for (int i = 0; i < data.length; i++) {
+            selectItems[i] = false;
+            map.put(i, false);
+        }
+
+        /**
+         * 第一个参数指定我们要显示的一组下拉多选框的数据集合
+         * 第二个参数代表哪几个选项被选择，如果是null，则表示一个都不选择，如果希望指定哪一个多选选项框被选择，
+         * 需要传递一个boolean[]数组进去，其长度要和第一个参数的长度相同，例如 {true, false, false, true};
+         * 第三个参数给每一个多选项绑定一个监听器
+         */
+        builder.setMultiChoiceItems(data, selectItems, new DialogInterface.OnMultiChoiceClickListener() {
+            StringBuffer sb = new StringBuffer(100);
+
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked) {
+                    //选择的选项保存到sb中
+//                    sb.append(data[which] + "+");
+                    map.put(which, true);
+                }
+//                String s = sb.toString();
+//                String data = s.substring(0, s.length() - 1);
+//                textView.setText(data);
+            }
+        });
+
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                textView.setText("");
+                dialog.dismiss();
+            }
+        });
+
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                StringBuffer sb = new StringBuffer(100);
+                for (int i = 0; i < map.size(); i++) {
+                    if (map.get(i)) {
+                        sb.append(data[i] + "+");
+                    }
+                }
+                String s = sb.toString();
+                String data = s.substring(0, s.length() - 1);
+                textView.setText(data);
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
 }
